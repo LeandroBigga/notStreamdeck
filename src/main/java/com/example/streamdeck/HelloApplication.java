@@ -1,16 +1,21 @@
 package com.example.streamdeck;
 
+import com.example.streamdeck.action.ui.component.StreamButton;
+import com.example.streamdeck.model.DeckItem;
+import com.example.streamdeck.model.Folder;
+import com.example.streamdeck.model.Menu;
+import com.example.streamdeck.service.AudioManager;
+import com.example.streamdeck.service.MenuManager;
+import com.example.streamdeck.service.MenuPersistence;
 import com.fazecast.jSerialComm.SerialPort;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.scene.effect.DropShadow;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
