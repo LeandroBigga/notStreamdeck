@@ -1,0 +1,2 @@
+JAVA_VERSION="21.0.10"
+MODULES="java.base com.fazecast.jSerialComm jdk.unsupported com.google.gson java.datatransfer java.xml java.prefs java.desktop javafx.base javafx.graphics javafx.controls java.scripting javafx.fxml javafx.media com.example.streamdeck"

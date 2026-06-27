@@ -1,0 +1,51 @@
+.root {
+    -fx-background-color: #0f0f0f;
+}
+
+/* Standard Button */
+.button {
+    -fx-background-color: #1f1f1f;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #2f2f2f;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+
+/* Hover Effekt */
+.button:hover {
+    -fx-background-color: #2a2a2a;
+    -fx-effect: dropshadow(gaussian, rgba(0,255,170,0.6), 15, 0.3, 0, 0);
+}
+
+/* Gedrückt */
+.button:pressed {
+    -fx-background-color: #00ffaa;
+    -fx-text-fill: black;
+}
+
+/* ComboBox */
+.combo-box {
+    -fx-background-color: #1f1f1f;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: white;
+    -fx-background-color: #1f1f1f;
+}
+
+/* TextField */
+.text-field {
+    -fx-background-color: #1f1f1f;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+}
+
+/* Labels */
+.label {
+    -fx-text-fill: white;
+}

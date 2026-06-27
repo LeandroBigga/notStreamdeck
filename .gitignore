@@ -1,0 +1,36 @@
+# Build & Runtime
+build/
+out/
+dist/
+*.class
+*.jar
+target/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# OS
+.DS_Store
+Thumbs.db
+.git/
+
+# Gradle/Maven
+.gradle/
+gradle/
+maven/
+*.gradlebuild/
+
+# Dependencies (die großen Dateien!)
+StreamDeck/app/app/lib/
+StreamDeck/runtime/lib/
+*.jmod
+*.zip
+jmods/
+
+# Local config
+local.properties
+gradle.properties
