@@ -3,6 +3,7 @@ package com.example.streamdeck.service;
 import com.example.streamdeck.action.app.OpenAppAction;
 import com.example.streamdeck.action.audio.SelectAppVolumeAction;
 import com.example.streamdeck.action.audio.SoundAction;
+import com.example.streamdeck.action.spotify.SpotifyControlAction;
 import com.example.streamdeck.model.*;
 import com.google.gson.Gson;
 
@@ -81,6 +82,12 @@ public class MenuPersistence {
                 si.iconPath = app.getIconPathRaw();
             }
 
+            else if (item instanceof SpotifyControlAction spotify) {
+                si.type = "spotify";
+                si.spotifyCommand = spotify.getCommand().name();
+                si.iconPath = spotify.getIconPath();
+            }
+
             sm.items[i] = si;
         }
 
@@ -129,6 +136,12 @@ public class MenuPersistence {
             else if ("openapp".equals(si.type)) {  // ✅ neu
                 OpenAppAction app = new OpenAppAction(si.exePath, si.iconPath);
                 menu.setItem(i, app);
+            }
+
+            else if ("spotify".equals(si.type)) {
+                SpotifyControlAction.Command cmd =
+                        SpotifyControlAction.Command.valueOf(si.spotifyCommand);
+                menu.setItem(i, new SpotifyControlAction(cmd, si.iconPath));
             }
 
 

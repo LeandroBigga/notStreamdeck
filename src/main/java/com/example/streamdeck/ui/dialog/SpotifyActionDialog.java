@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 
 public class SpotifyActionDialog {
 
-    public static void open(StreamButton button) {
+    public static void open(StreamButton button, String iconPath) {
 
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
@@ -30,7 +30,7 @@ public class SpotifyActionDialog {
         prevBtn.setMaxWidth(Double.MAX_VALUE);
 
         playPauseBtn.setOnAction(e -> {
-            SpotifyControlAction action = new SpotifyControlAction(SpotifyControlAction.Command.PLAY_PAUSE);
+            SpotifyControlAction action = new SpotifyControlAction(SpotifyControlAction.Command.PLAY_PAUSE, iconPath);
             button.setAction(action);
             button.update(action);
             MenuManager.getCurrentMenu().setItem(button.getId() - 1, action);
@@ -39,7 +39,7 @@ public class SpotifyActionDialog {
         });
 
         nextBtn.setOnAction(e -> {
-            SpotifyControlAction action = new SpotifyControlAction(SpotifyControlAction.Command.NEXT);
+            SpotifyControlAction action = new SpotifyControlAction(SpotifyControlAction.Command.NEXT, iconPath);
             button.setAction(action);
             button.update(action);
             MenuManager.getCurrentMenu().setItem(button.getId() - 1, action);
@@ -48,7 +48,7 @@ public class SpotifyActionDialog {
         });
 
         prevBtn.setOnAction(e -> {
-            SpotifyControlAction action = new SpotifyControlAction(SpotifyControlAction.Command.PREVIOUS);
+            SpotifyControlAction action = new SpotifyControlAction(SpotifyControlAction.Command.PREVIOUS, iconPath);
             button.setAction(action);
             button.update(action);
             MenuManager.getCurrentMenu().setItem(button.getId() - 1, action);

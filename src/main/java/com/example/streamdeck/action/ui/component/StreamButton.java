@@ -1,18 +1,23 @@
 package com.example.streamdeck.action.ui.component;
 
 import com.example.streamdeck.action.ButtonAction;
+import com.example.streamdeck.action.ui.BackAction;
 import com.example.streamdeck.model.DeckItem;
+import com.example.streamdeck.service.MenuManager;
 import com.example.streamdeck.ui.dialog.ConfigDialog;
 import javafx.animation.PauseTransition;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-
 public class StreamButton {
 
     private final int id;
@@ -52,13 +57,99 @@ public class StreamButton {
         glow.setRadius(40);
         glow.setSpread(0.7);
 
+        enableDragAndDrop();
+
         // UI Klick → Konfiguration öffnen
         view.setOnMouseClicked(e -> {
-            ConfigDialog.open(this);
+            if (e.getButton() == MouseButton.PRIMARY) {
+                DeckItem item = MenuManager.getCurrentMenu().getItem(id - 1);
+                if (item != null) {
+                    item.execute();
+                } else {
+                    ConfigDialog.open(this);
+                }
+            } else if (e.getButton() == javafx.scene.input.MouseButton.SECONDARY) {
+                ConfigDialog.open(this);
+            }
         });
 
     }
+    private void enableDragAndDrop() {
 
+        view.setOnDragDetected(event -> {
+
+            DeckItem item = MenuManager.getCurrentMenu().getItem(id - 1);
+
+            if (item == null || item instanceof BackAction) {
+                event.consume();
+                return;
+            }
+
+            Dragboard dragboard = view.startDragAndDrop(TransferMode.MOVE);
+
+            ClipboardContent content = new ClipboardContent();
+            content.putString(String.valueOf(id));
+            dragboard.setContent(content);
+
+            view.setOpacity(0.5);
+
+            event.consume();
+        });
+
+        view.setOnDragOver(event -> {
+
+            Dragboard dragboard = event.getDragboard();
+
+            if (event.getGestureSource() != view && dragboard.hasString()) {
+
+                DeckItem targetItem = MenuManager.getCurrentMenu().getItem(id - 1);
+
+                if (!(targetItem instanceof BackAction)) {
+                    event.acceptTransferModes(TransferMode.MOVE);
+                    background.setStroke(Color.web("#00ffaa"));
+                    background.setStrokeWidth(3);
+                }
+            }
+
+            event.consume();
+        });
+
+        view.setOnDragExited(event -> {
+            background.setStroke(null);
+            event.consume();
+        });
+
+        view.setOnDragDropped(event -> {
+
+            Dragboard dragboard = event.getDragboard();
+            boolean success = false;
+
+            if (dragboard.hasString()) {
+                try {
+                    int sourceButtonId = Integer.parseInt(dragboard.getString());
+                    int targetButtonId = id;
+
+                    success = MenuManager.moveOrSwapItem(
+                            sourceButtonId - 1,
+                            targetButtonId - 1
+                    );
+
+                } catch (NumberFormatException ignored) {
+                    success = false;
+                }
+            }
+
+            background.setStroke(null);
+            event.setDropCompleted(success);
+            event.consume();
+        });
+
+        view.setOnDragDone(event -> {
+            view.setOpacity(1.0);
+            background.setStroke(null);
+            event.consume();
+        });
+    }
     public StackPane getView() {
         return view;
     }
@@ -74,7 +165,7 @@ public class StreamButton {
     public void update(DeckItem item) {
 
         if (item == null) {
-            label.setText("");
+            label.setText("+");
             iconView.setImage(null);
             return;
         }

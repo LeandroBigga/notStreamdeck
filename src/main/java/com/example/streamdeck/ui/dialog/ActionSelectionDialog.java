@@ -8,9 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.FileChooser;
-
-import java.io.File;
 
 public class ActionSelectionDialog {
 
@@ -22,7 +19,7 @@ public class ActionSelectionDialog {
 
         final String[] selectedIcon = {null};
 
-        Button chooseIconBtn = new Button("PNG Icon wählen");
+        Button chooseIconBtn = new Button("Icon wählen");
         Button openAppBtn = new Button("App öffnen");
         Button volumeBtn = new Button("App Lautstärke");
         Button soundBtn = new Button("Soundboard Sound");
@@ -34,18 +31,12 @@ public class ActionSelectionDialog {
         soundBtn.setMaxWidth(Double.MAX_VALUE);
         spotifyBtn.setMaxWidth(Double.MAX_VALUE);
 
-        // PNG auswählen
+        // Icon wählen (Galerie ODER eigene Datei)
         chooseIconBtn.setOnAction(e -> {
-            FileChooser chooser = new FileChooser();
-            chooser.setTitle("PNG Icon auswählen");
-            chooser.getExtensionFilters().add(
-                    new FileChooser.ExtensionFilter("PNG Files", "*.png")
-            );
-            File file = chooser.showOpenDialog(stage);
-            if (file != null) {
-                selectedIcon[0] = file.getAbsolutePath();
+            IconPickerDialog.open(iconPath -> {
+                selectedIcon[0] = iconPath;
                 chooseIconBtn.setText("Icon gewählt ✅");
-            }
+            });
         });
 
         // App öffnen
@@ -68,7 +59,7 @@ public class ActionSelectionDialog {
 
         // Spotify Steuerung
         spotifyBtn.setOnAction(e -> {
-            SpotifyActionDialog.open(button); // hier muss SpotifyActionDialog existieren
+            SpotifyActionDialog.open(button, selectedIcon[0]); // Icon jetzt mitgeben
             stage.close();
         });
 

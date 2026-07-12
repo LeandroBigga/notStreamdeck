@@ -15,9 +15,19 @@ public class SpotifyControlAction implements DeckItem, ButtonAction {
     }
 
     private final Command command;
+    private final String iconPath;
+
+    public Command getCommand() {
+        return command;
+    }
 
     public SpotifyControlAction(Command command) {
+        this(command, null);
+    }
+
+    public SpotifyControlAction(Command command, String iconPath) {
         this.command = command;
+        this.iconPath = iconPath;
     }
 
     // JNA Interface für Windows
@@ -55,6 +65,12 @@ public class SpotifyControlAction implements DeckItem, ButtonAction {
     public String getLabel() {
         return "Spotify: " + command.name();
     }
+
+    @Override
+    public String getIconPath() {
+        return iconPath;
+    }
+
     @Override
     public String getDescription() {
         return "Spotify: " + command.name();

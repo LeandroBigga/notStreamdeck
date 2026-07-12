@@ -7,5 +7,7 @@ public class SerializableItem {
     public String processName;
     public String exePath;
     public String iconPath;
+    public String spotifyCommand;
     public SerializableMenu submenu;
+
 }

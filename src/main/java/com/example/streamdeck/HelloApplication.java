@@ -98,7 +98,7 @@ public class HelloApplication extends Application {
         mainRoot.setRight(sliderBox);
 
 
-        Scene scene = new Scene(mainRoot, 500, 400);
+        Scene scene = new Scene(mainRoot, 550, 400);
         scene.getStylesheets().add(
                 getClass().getResource("/style.css").toExternalForm()
         );

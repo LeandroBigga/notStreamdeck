@@ -1,8 +1,10 @@
 package com.example.streamdeck.ui.dialog;
 
 import com.example.streamdeck.*;
+import com.example.streamdeck.action.app.OpenAppAction;
 import com.example.streamdeck.action.audio.SelectAppVolumeAction;
 import com.example.streamdeck.action.audio.SoundAction;
+import com.example.streamdeck.action.spotify.SpotifyControlAction;
 import com.example.streamdeck.action.ui.component.StreamButton;
 import com.example.streamdeck.model.DeckItem;
 import com.example.streamdeck.action.ui.component.Theme;
@@ -23,13 +25,9 @@ public class EditItemDialog {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Button bearbeiten");
 
-        Button changeIcon = new Button("PNG ändern");
+        Button changeIcon = new Button("Icon ändern");
         Button clear = new Button("Clear (Löschen)");
         Button cancel = new Button("Abbrechen");
-
-        changeIcon.setMaxWidth(Double.MAX_VALUE);
-        clear.setMaxWidth(Double.MAX_VALUE);
-        cancel.setMaxWidth(Double.MAX_VALUE);
 
         changeIcon.setMaxWidth(Double.MAX_VALUE);
         clear.setMaxWidth(Double.MAX_VALUE);
@@ -41,29 +39,26 @@ public class EditItemDialog {
         // ===== ICON ÄNDERN =====
         changeIcon.setOnAction(e -> {
 
-            javafx.stage.FileChooser chooser = new javafx.stage.FileChooser();
-            chooser.getExtensionFilters().add(
-                    new javafx.stage.FileChooser.ExtensionFilter("PNG Files", "*.png")
-            );
+            IconPickerDialog.open(iconPath -> {
 
-            java.io.File file = chooser.showOpenDialog(stage);
-
-            if (file != null && item != null) {
+                if (item == null) return;
 
                 DeckItem newItem = null;
 
                 if (item instanceof SoundAction sound) {
-                    newItem = new SoundAction(
-                            sound.getFilePath(),
-                            file.getAbsolutePath()
-                    );
+                    newItem = new SoundAction(sound.getFilePath(), iconPath);
                 }
 
                 else if (item instanceof SelectAppVolumeAction volume) {
-                    newItem = new SelectAppVolumeAction(
-                            volume.getProcessName(),
-                            file.getAbsolutePath()
-                    );
+                    newItem = new SelectAppVolumeAction(volume.getProcessName(), iconPath);
+                }
+
+                else if (item instanceof OpenAppAction app) {
+                    newItem = new OpenAppAction(app.getExePath(), iconPath);
+                }
+
+                else if (item instanceof SpotifyControlAction spotify) {
+                    newItem = new SpotifyControlAction(spotify.getCommand(), iconPath);
                 }
 
                 if (newItem != null) {
@@ -73,7 +68,7 @@ public class EditItemDialog {
                     MenuPersistence.save(MenuManager.getRootMenu());
                     HelloApplication.refreshUI();
                 }
-            }
+            });
 
             stage.close();
         });
