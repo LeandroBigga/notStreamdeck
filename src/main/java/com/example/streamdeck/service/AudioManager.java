@@ -1,13 +1,23 @@
 package com.example.streamdeck.service;
 
+import java.io.File;
 import java.io.IOException;
 
 public class AudioManager {
 
-    private static final String EXE_PATH =
-            "C:\\Users\\leand\\source\\repos\\AudioManagment\\x64\\Debug\\AudioManagment.exe";
-
     private static String targetProcess = null;
+
+    private static String resolveExePath() {
+        // Liegt neben der gestarteten JAR/exe, im Unterordner "native"
+        String appDir = new File(AudioManager.class
+                .getProtectionDomain()
+                .getCodeSource()
+                .getLocation()
+                .getPath())
+                .getParentFile()
+                .getPath();
+        return appDir + File.separator + "native" + File.separator + "AudioManagment.exe";
+    }
 
     public static void setTargetProcess(String processName) {
         targetProcess = processName;
@@ -21,9 +31,17 @@ public class AudioManager {
 
         if (targetProcess == null) return;
 
+        String exePath = resolveExePath();
+        File exeFile = new File(exePath);
+
+        if (!exeFile.exists()) {
+            System.err.println("AudioManagment.exe nicht gefunden unter: " + exePath);
+            return;
+        }
+
         try {
             ProcessBuilder builder = new ProcessBuilder(
-                    EXE_PATH,
+                    exePath,
                     targetProcess,
                     String.valueOf(volume)
             );
